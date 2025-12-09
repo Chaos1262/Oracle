@@ -1,0 +1,1321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Simulacrum of the Triple Goddess – System & Logic</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    :root {
+      --phi: 1.618;
+      --color-salt-bg: #05040a;
+      --color-salt-grid: rgba(255, 255, 255, 0.04);
+      --color-mercury: #c0c8ff;
+      --color-sulfur: #ffb347;
+      --color-salt: #f4f4f4;
+      --color-soft: rgba(255, 255, 255, 0.8);
+      --border-glow: 1px solid rgba(255, 255, 255, 0.22);
+      --radius-large: 24px;
+      --shadow-soft: 0 0 40px rgba(0, 0, 0, 0.7);
+      --transition-fast: 160ms ease-out;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top, #1b1530 0, transparent 50%),
+        radial-gradient(circle at bottom, #0a111f 0, transparent 55%),
+        #000;
+      color: var(--color-salt);
+      min-height: 100vh;
+      display: flex;
+      align-items: stretch;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .shell {
+      width: min(1000px, 100%);
+      padding: 24px 20px 20px;
+      border-radius: calc(var(--radius-large) * 1.1);
+      background:
+        linear-gradient(
+          to right,
+          var(--color-salt-grid) 1px,
+          transparent 1px
+        ),
+        linear-gradient(
+          to bottom,
+          var(--color-salt-grid) 1px,
+          transparent 1px
+        );
+      background-size:
+        calc(32px * var(--phi)) calc(32px * var(--phi)),
+        calc(32px * var(--phi)) calc(32px * var(--phi));
+      box-shadow: var(--shadow-soft);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .shell::before {
+      content: "";
+      position: absolute;
+      inset: 14%;
+      border-radius: 50%;
+      border: 1px dashed rgba(255, 255, 255, 0.12);
+      box-shadow:
+        0 0 80px rgba(255, 255, 255, 0.04),
+        0 0 140px rgba(192, 200, 255, 0.24);
+      pointer-events: none;
+    }
+
+    .inner {
+      position: relative;
+      z-index: 1;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .title-block h1 {
+      font-size: 1.25rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--color-mercury);
+      margin-bottom: 4px;
+    }
+
+    .title-block p {
+      font-size: 0.82rem;
+      color: rgba(255, 255, 255, 0.8);
+      max-width: 32rem;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      font-size: 0.8rem;
+      text-decoration: none;
+      color: var(--color-mercury);
+      background: rgba(0, 0, 0, 0.65);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: background var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast), border-color var(--transition-fast);
+    }
+
+    .btn:hover {
+      background: rgba(192, 200, 255, 0.12);
+      transform: translateY(-1px);
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.7);
+    }
+
+    .btn-primary {
+      background: radial-gradient(circle at top, #ffeac0, #ffb347);
+      border-color: rgba(0, 0, 0, 0.8);
+      color: #2b1700;
+      font-weight: 600;
+    }
+
+    .btn-primary:hover {
+      background: radial-gradient(circle at top, #fff3d2, #ffc463);
+    }
+
+    h2 {
+      margin-top: 18px;
+      margin-bottom: 6px;
+      font-size: 0.95rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    p {
+      font-size: 0.85rem;
+      line-height: 1.5;
+      color: rgba(255, 255, 255, 0.9);
+      margin-bottom: 6px;
+    }
+
+    ul {
+      font-size: 0.83rem;
+      line-height: 1.45;
+      color: rgba(255, 255, 255, 0.9);
+      margin-left: 1.2rem;
+      margin-bottom: 8px;
+    }
+
+    code {
+      font-size: 0.8rem;
+      padding: 1px 4px;
+      border-radius: 4px;
+      background: rgba(0, 0, 0, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    /* Interactive mapping lab */
+
+    .lab {
+      margin-top: 12px;
+      border-radius: 18px;
+      border: var(--border-glow);
+      background: rgba(0, 0, 0, 0.72);
+      padding: 12px;
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.1fr);
+      gap: 10px;
+    }
+
+    @media (max-width: 800px) {
+      .lab {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .lab-controls {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .field-label {
+      font-size: 0.73rem;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: rgba(255, 255, 255, 0.7);
+      margin-bottom: 2px;
+    }
+
+    .field-row {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    select {
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      background: rgba(5, 6, 14, 0.9);
+      color: var(--color-salt);
+      padding: 6px 10px;
+      font-size: 0.8rem;
+      outline: none;
+      min-width: 0;
+      flex: 1;
+    }
+
+    select:focus {
+      border-color: var(--color-mercury);
+      box-shadow: 0 0 0 1px rgba(192, 200, 255, 0.5);
+    }
+
+    input[type="number"] {
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      background: rgba(5, 6, 14, 0.9);
+      color: var(--color-salt);
+      padding: 6px 10px;
+      font-size: 0.8rem;
+      outline: none;
+      min-width: 0;
+      flex: 1;
+    }
+
+    input[type="number"]:focus {
+      border-color: var(--color-mercury);
+      box-shadow: 0 0 0 1px rgba(192, 200, 255, 0.5);
+    }
+
+    .lab-note {
+      font-size: 0.75rem;
+      color: rgba(255, 255, 255, 0.75);
+      margin-top: 4px;
+    }
+
+    /* Pathway diagram */
+
+    .pathway {
+      border-radius: 18px;
+      border: var(--border-glow);
+      background: radial-gradient(circle at top, rgba(255, 255, 255, 0.06), rgba(0, 0, 0, 0.95));
+      padding: 10px;
+      display: grid;
+      grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+      gap: 8px;
+      align-items: center;
+    }
+
+    @media (max-width: 800px) {
+      .pathway {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .pathway-svg-wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .pathway-svg {
+      width: 100%;
+      max-width: 320px;
+    }
+
+    .pathway-node {
+      transition: transform var(--transition-fast), filter var(--transition-fast);
+    }
+
+    .pathway-node.active {
+      transform: scale(1.06);
+      filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.7));
+    }
+
+    .pathway-info {
+      font-size: 0.8rem;
+    }
+
+    .pathway-info strong {
+      color: var(--color-sulfur);
+    }
+
+    .pathway-line {
+      stroke-dasharray: 160;
+      stroke-dashoffset: 160;
+      animation: draw-line 0.85s ease-out forwards;
+    }
+
+    @keyframes draw-line {
+      to {
+        stroke-dashoffset: 0;
+      }
+    }
+
+    /* Hexagram atlas */
+
+    .hex-grid {
+      margin-top: 10px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+      gap: 8px;
+      max-height: 260px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+
+    .hex-card {
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      background: rgba(0, 0, 0, 0.78);
+      padding: 6px 8px;
+      font-size: 0.78rem;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      cursor: pointer;
+      transition: background var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast), border-color var(--transition-fast);
+    }
+
+    .hex-card:hover {
+      background: rgba(255, 255, 255, 0.08);
+      transform: translateY(-1px);
+      border-color: rgba(255, 255, 255, 0.6);
+      box-shadow: 0 0 9px rgba(0, 0, 0, 0.8);
+    }
+
+    .hex-card-number {
+      font-weight: 600;
+      color: var(--color-sulfur);
+      font-size: 0.8rem;
+    }
+
+    .hex-card-name {
+      color: rgba(255, 255, 255, 0.92);
+    }
+
+    .hex-card-key {
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 0.72rem;
+    }
+
+    /* Minor example + diagrams */
+
+    .diagram-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 10px;
+      margin-bottom: 10px;
+    }
+
+    @media (max-width: 760px) {
+      .diagram-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .diagram-card {
+      border-radius: 16px;
+      border: var(--border-glow);
+      padding: 10px;
+      background: rgba(0, 0, 0, 0.78);
+      font-size: 0.8rem;
+    }
+
+    .diagram-card h3 {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      margin-bottom: 6px;
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    .glyph {
+      margin: 4px 0 6px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .glyph svg {
+      width: 72px;
+      height: 72px;
+      display: block;
+    }
+
+    .tiny-caption {
+      font-size: 0.75rem;
+      color: rgba(255, 255, 255, 0.76);
+    }
+
+    .minor-example {
+      border-radius: 16px;
+      border: var(--border-glow);
+      padding: 10px;
+      background: rgba(0, 0, 0, 0.8);
+      font-size: 0.8rem;
+      margin-top: 8px;
+    }
+
+    .minor-example strong {
+      color: var(--color-sulfur);
+    }
+
+    /* Glossary */
+
+    .glossary {
+      margin-top: 8px;
+      border-radius: 16px;
+      border: var(--border-glow);
+      padding: 10px;
+      background: rgba(0, 0, 0, 0.86);
+      font-size: 0.82rem;
+    }
+
+    .glossary dl {
+      display: grid;
+      grid-template-columns: minmax(0, 0.9fr) minmax(0, 2.1fr);
+      column-gap: 12px;
+      row-gap: 6px;
+    }
+
+    @media (max-width: 760px) {
+      .glossary dl {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .glossary dt {
+      font-weight: 600;
+      color: var(--color-mercury);
+    }
+
+    .glossary dd {
+      margin: 0;
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    /* Tutorial overlay */
+
+    .tutorial-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.72);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+    }
+
+    .tutorial-overlay.hidden {
+      display: none;
+    }
+
+    .tutorial-card {
+      width: min(420px, 90%);
+      border-radius: 18px;
+      border: var(--border-glow);
+      background: radial-gradient(circle at top, rgba(255, 255, 255, 0.06), #05040a);
+      padding: 16px 16px 12px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .tutorial-step {
+      font-size: 0.86rem;
+      color: rgba(255, 255, 255, 0.94);
+      margin-bottom: 10px;
+    }
+
+    .tutorial-step strong {
+      color: var(--color-sulfur);
+    }
+
+    .tutorial-controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 4px;
+      gap: 8px;
+    }
+
+    .tutorial-controls .left {
+      font-size: 0.75rem;
+      color: rgba(255, 255, 255, 0.75);
+    }
+
+    .tutorial-controls .right {
+      display: flex;
+      gap: 8px;
+    }
+
+    .tutorial-btn {
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      background: rgba(0, 0, 0, 0.7);
+      color: var(--color-mercury);
+      font-size: 0.78rem;
+      padding: 4px 10px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .tutorial-btn.primary {
+      background: radial-gradient(circle at top, #ffeac0, #ffb347);
+      color: #2b1700;
+      border-color: rgba(0, 0, 0, 0.9);
+      font-weight: 600;
+    }
+
+    /* Print styles (for PDF export) */
+
+    @media print {
+      body {
+        background: #ffffff;
+        padding: 0;
+      }
+      .shell {
+        width: 100%;
+        box-shadow: none;
+        background: #ffffff;
+      }
+      .shell::before {
+        display: none;
+      }
+      .btn,
+      .header-actions,
+      .tutorial-overlay {
+        display: none !important;
+      }
+      .hex-grid {
+        max-height: none;
+        overflow: visible;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <div class="inner">
+      <header>
+        <div class="title-block">
+          <h1>System &amp; Logic</h1>
+          <p>
+            A friendly guide to how the Triple Goddess engine links
+            <em>Geomancy</em>, the <em>I&nbsp;Ching</em>, and <em>Tarot</em> into one speaking pattern.
+          </p>
+        </div>
+        <div class="header-actions">
+          <a href="index.html" class="btn" title="Go back to the living oracle interface.">
+            ← Back to Oracle
+          </a>
+          <button class="btn btn-primary" id="btn-print" title="Print or Save as PDF a field-manual view of this page.">
+            🖨 Print / PDF
+          </button>
+        </div>
+      </header>
+
+      <h2>1. Big picture</h2>
+      <p>
+        This system is a <strong>translator</strong>. It doesn’t just give random symbols; it
+        aligns three different oracles so they all describe the same situation:
+      </p>
+      <ul>
+        <li><strong>Geomantic figure</strong> – the <em>state</em> of things (16 patterns like Laetitia, Populus, Carcer).</li>
+        <li><strong>I&nbsp;Ching hexagram</strong> – the <em>process</em> you’re in (64 six-line patterns).</li>
+        <li><strong>Tarot cards</strong> – the <em>story and characters</em> around you (Majors + Minors).</li>
+      </ul>
+      <p>
+        Whenever you cast or choose a card, the engine tries to tell you:
+        <strong>“This is the mood, this is the process, these are the archetypes.”</strong>
+      </p>
+
+      <!-- INTERACTIVE MAPPING LAB -->
+      <h2>2. Mapping lab (play with the system)</h2>
+      <p>
+        You can start from <strong>any side</strong> and watch the triad build itself. Try picking
+        a geomantic figure, or enter a hexagram number, or choose a Tarot card.
+      </p>
+
+      <section class="lab" aria-label="Interactive mapping lab">
+        <div class="lab-controls">
+          <div>
+            <div class="field-label">Start from Geomancy</div>
+            <select id="lab-geomancy" title="Pick any of the 16 classical figures.">
+              <option value="">– choose a figure –</option>
+            </select>
+          </div>
+
+          <div>
+            <div class="field-label">Start from Hexagram # (1–64)</div>
+            <input
+              id="lab-hex"
+              type="number"
+              min="1"
+              max="64"
+              placeholder="e.g. 10, 12, 53…"
+              title="Enter a hexagram number."
+            />
+          </div>
+
+          <div>
+            <div class="field-label">Start from Tarot Major</div>
+            <select id="lab-major" title="Majors as defined in your primary mappings.">
+              <option value="">– choose a major –</option>
+            </select>
+          </div>
+
+          <div>
+            <div class="field-label">Start from Tarot Minor</div>
+            <div class="field-row">
+              <select id="lab-minor-suit" title="Suit maps to lower trigram.">
+                <option value="">Suit</option>
+                <option value="wands">Wands</option>
+                <option value="cups">Cups</option>
+                <option value="swords">Swords</option>
+                <option value="pentacles">Pentacles</option>
+              </select>
+              <select id="lab-minor-rank" title="Rank maps to upper trigram.">
+                <option value="">Rank</option>
+                <option value="ace">Ace</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+                <option value="page">Page</option>
+                <option value="knight">Knight</option>
+                <option value="queen">Queen</option>
+                <option value="king">King</option>
+              </select>
+            </div>
+          </div>
+
+          <p class="lab-note">
+            The engine always tries to land on: <strong>Figure → Hexagram → Tarot Majors</strong>.
+            One pattern, three ways of speaking.
+          </p>
+        </div>
+
+        <!-- Pathway diagram and details -->
+        <div class="pathway" aria-label="Symbolic pathway diagram">
+          <div class="pathway-svg-wrapper">
+            <svg class="pathway-svg" viewBox="0 0 320 160" aria-hidden="true">
+              <!-- Lines -->
+              <line x1="60" y1="80" x2="160" y2="80" stroke="#ffb347" stroke-width="2" class="pathway-line" />
+              <line x1="160" y1="80" x2="260" y2="80" stroke="#c0c8ff" stroke-width="2" class="pathway-line" />
+
+              <!-- Geomancy node -->
+              <g id="node-geomancy" class="pathway-node">
+                <circle cx="60" cy="80" r="26" fill="rgba(255,255,255,0.06)" stroke="#ffb347" stroke-width="2" />
+                <text x="60" y="84" text-anchor="middle" font-size="9" fill="#ffb347">
+                  GEOMANCY
+                </text>
+              </g>
+
+              <!-- Hexagram node -->
+              <g id="node-hex" class="pathway-node">
+                <rect x="140" y="58" width="40" height="44" rx="6"
+                      fill="rgba(255,255,255,0.07)" stroke="#f4f4f4" stroke-width="2" />
+                <!-- simple 6-line glyph -->
+                <line x1="146" y1="64" x2="174" y2="64" stroke="#f4f4f4" stroke-width="2" />
+                <line x1="146" y1="70" x2="174" y2="70" stroke="#f4f4f4" stroke-width="2" />
+                <line x1="146" y1="76" x2="174" y2="76" stroke="#f4f4f4" stroke-width="2" />
+                <line x1="146" y1="82" x2="174" y2="82" stroke="#f4f4f4" stroke-width="2" />
+                <line x1="146" y1="88" x2="174" y2="88" stroke="#f4f4f4" stroke-width="2" />
+                <line x1="146" y1="94" x2="174" y2="94" stroke="#f4f4f4" stroke-width="2" />
+              </g>
+
+              <!-- Tarot node -->
+              <g id="node-tarot" class="pathway-node">
+                <rect x="238" y="56" width="44" height="48" rx="6"
+                      fill="rgba(255,255,255,0.04)" stroke="#c0c8ff" stroke-width="2" />
+                <text x="260" y="83" text-anchor="middle" font-size="9" fill="#c0c8ff">
+                  TAROT
+                </text>
+              </g>
+            </svg>
+          </div>
+          <div class="pathway-info">
+            <p id="lab-summary">
+              Choose any starting point on the left and watch the triad assemble here:
+              <strong>figure → hexagram → Tarot</strong>.
+            </p>
+            <p>
+              <strong>Figure:</strong> <span id="lab-figure-name">—</span>
+              <br />
+              <span id="lab-figure-key" style="opacity:0.85;"></span>
+            </p>
+            <p>
+              <strong>Hexagram:</strong> <span id="lab-hex-name">—</span>
+              <br />
+              <span id="lab-hex-keyword" style="opacity:0.85;"></span>
+            </p>
+            <p>
+              <strong>Tarot Majors:</strong> <span id="lab-majors-list">—</span>
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- GEOMANCY & FIGURE DIAGRAMS -->
+      <h2>3. From 12 coins to a figure</h2>
+      <p>
+        On the Oracle page, “Cast 12 coins” does this:
+      </p>
+      <ul>
+        <li>There are 4 rows (Fire, Air, Water, Earth), each with 3 coins = 12 tosses.</li>
+        <li>Odd number of heads in a row → <code>1</code> (active / dotted).</li>
+        <li>Even number of heads → <code>2</code> (passive / solid).</li>
+        <li>This gives a 4-number code like <code>[1,2,2,1]</code> which is matched to a figure.</li>
+      </ul>
+
+      <div class="diagram-grid">
+        <div class="diagram-card">
+          <h3>Laetitia (Joy)</h3>
+          <div class="glyph">
+            <svg viewBox="0 0 100 100">
+              <circle cx="50" cy="80" r="4" fill="#ffb347" />
+              <rect x="32" y="61" width="36" height="4" rx="2" fill="#f4f4f4" />
+              <rect x="32" y="43" width="36" height="4" rx="2" fill="#f4f4f4" />
+              <circle cx="50" cy="24" r="4" fill="#ffb347" />
+            </svg>
+          </div>
+          <p class="tiny-caption">
+            Code <code>[1,2,2,1]</code>, “Joy / Uplift”. Mapped to Hexagram 10 and The Star.
+          </p>
+        </div>
+
+        <div class="diagram-card">
+          <h3>Populus (The People)</h3>
+          <div class="glyph">
+            <svg viewBox="0 0 100 100">
+              <rect x="32" y="22" width="36" height="4" rx="2" fill="#f4f4f4" />
+              <rect x="32" y="40" width="36" height="4" rx="2" fill="#f4f4f4" />
+              <rect x="32" y="58" width="36" height="4" rx="2" fill="#f4f4f4" />
+              <rect x="32" y="76" width="36" height="4" rx="2" fill="#f4f4f4" />
+            </svg>
+          </div>
+          <p class="tiny-caption">
+            Code <code>[2,2,2,2]</code>, “The Crowd / Collective”. Often used for groups &amp; gatherings.
+          </p>
+        </div>
+
+        <div class="diagram-card">
+          <h3>Via (The Path)</h3>
+          <div class="glyph">
+            <svg viewBox="0 0 100 100">
+              <circle cx="50" cy="22" r="4" fill="#ffb347" />
+              <circle cx="50" cy="40" r="4" fill="#ffb347" />
+              <circle cx="50" cy="58" r="4" fill="#ffb347" />
+              <circle cx="50" cy="76" r="4" fill="#ffb347" />
+            </svg>
+          </div>
+          <p class="tiny-caption">
+            Code <code>[1,1,1,1]</code>, “The Road / Journey”. Mapped to Hexagram 53 and The Chariot.
+          </p>
+        </div>
+      </div>
+
+      <h2>4. Hexagrams and Tarot (curated mapping)</h2>
+      <p>
+        In your full spec, there is a binary way to get from any figure to a hexagram.
+        On the web side, we honor your <strong>curated mapping</strong> first:
+        each figure has a chosen hexagram and a cluster of Tarot Majors.
+      </p>
+      <ul>
+        <li><strong>Laetitia</strong> → Hexagram 10 → <em>The Star</em>.</li>
+        <li><strong>Carcer</strong> → Hexagram 12 → <em>The Devil</em>.</li>
+        <li><strong>Populus</strong> → Hexagram 8 → <em>The High Priestess</em>, <em>The Moon</em>.</li>
+        <li><strong>Via</strong> → Hexagram 53 → <em>The Chariot</em>.</li>
+      </ul>
+      <p>
+        The Oracle page reads that table and shows you the triad directly.
+      </p>
+
+      <h2>5. Tarot Minors as trigrams</h2>
+      <p>
+        The Minor Arcana combines with the I&nbsp;Ching trigram system:
+      </p>
+      <ul>
+        <li>Each <strong>Suit</strong> → lower trigram (the “field”): Wands (Thunder), Cups (Water),
+          Swords (Wind), Pentacles (Earth).</li>
+        <li>Each <strong>Rank</strong> → upper trigram (the “sky” / context): Ace = Heaven, 2 = Earth,
+          3 = Thunder, 4 = Water, 5 = Mountain, 6 = Wind, 7 = Fire, 8 = Lake, 9–10 + courts repeat patterns.</li>
+        <li>The pair of trigrams (upper, lower) picks a specific hexagram in an internal 8×8 grid.</li>
+      </ul>
+
+      <div class="minor-example">
+        <p><strong>Example: 2 of Cups</strong></p>
+        <ul>
+          <li>Suit = Cups → lower trigram = Water (<code>kan</code>).</li>
+          <li>Rank = 2 → upper trigram = Earth (<code>kun</code>).</li>
+          <li>Earth over Water resolves to one of the 64 hexagrams.</li>
+          <li>The engine then picks a geomantic figure whose mapped hexagram or meaning matches that vibe
+            (e.g., <em>Populus</em> for “union / community”).</li>
+        </ul>
+        <p>
+          So when you see 2 of Cups in this system, you’re really seeing:
+          <strong>a love/union image + a hexagram process + a geomantic state</strong>, all saying
+          something about the relationship.
+        </p>
+      </div>
+
+      <h2>6. Hexagram atlas (clickable)</h2>
+      <p>
+        Click any hexagram below to jump back into the Oracle with that hexagram preloaded.
+      </p>
+      <div class="hex-grid" id="hex-grid" aria-label="64 I Ching hexagrams">
+        <!-- Filled by script -->
+      </div>
+
+      <h2>7. Glossary &amp; philosophy</h2>
+      <section class="glossary">
+        <dl>
+          <dt>Active (1)</dt>
+          <dd>Dotted / single point line in geomancy. Yang-like, expressive, moving.</dd>
+
+          <dt>Passive (2)</dt>
+          <dd>Solid / bar line in geomancy. Yin-like, receptive, holding or containing.</dd>
+
+          <dt>Upper trigram</dt>
+          <dd>In Minor mapping, describes the “sky” / context / intention surrounding the event.</dd>
+
+          <dt>Lower trigram</dt>
+          <dd>Describes the “ground” / situation / material conditions of the event.</dd>
+
+          <dt>Hexagram</dt>
+          <dd>Six stacked lines (trigrams on top of each other) describing a process over time.</dd>
+
+          <dt>Geomantic figure</dt>
+          <dd>Four-line 1/2 pattern encoding a state, mood, or “stance” in the world.</dd>
+
+          <dt>Primary mapping</dt>
+          <dd>Your curated table that says which hexagram is “official” for each figure and which Majors go with it.</dd>
+
+          <dt>Triad</dt>
+          <dd>The threefold result: <strong>Figure (state) + Hexagram (process) + Tarot (story)</strong>.</dd>
+        </dl>
+      </section>
+
+      <p style="margin-top:8px;font-size:0.8rem;color:rgba(255,255,255,0.7);">
+        Design note: the golden-ratio grid, sulfur/mercury/salt colors, and circular halo are all intentional.
+        The page itself behaves like a temple diagram, not just documentation.
+      </p>
+    </div>
+  </main>
+
+  <!-- Tutorial overlay -->
+  <div class="tutorial-overlay hidden" id="tutorial-overlay" aria-hidden="true">
+    <div class="tutorial-card">
+      <div id="tutorial-step-text" class="tutorial-step">
+        <!-- filled by JS -->
+      </div>
+      <div class="tutorial-controls">
+        <div class="left" id="tutorial-progress"></div>
+        <div class="right">
+          <button class="tutorial-btn" id="tutorial-skip">Skip</button>
+          <button class="tutorial-btn primary" id="tutorial-next">Next</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ======= CORE DATA (mirrors what index.html uses) =======
+
+    const GEOMANTIC_FIGURES = [
+      { figure: "via", name: "Via", key: "The Path", binary_code: [1, 1, 1, 1], iching: 53, tarot_major: ["the_chariot"] },
+      { figure: "populus", name: "Populus", key: "The Collective", binary_code: [2, 2, 2, 2], iching: 8, tarot_major: ["the_high_priestess", "the_moon"] },
+      { figure: "conjunctio", name: "Conjunctio", key: "The Bond", binary_code: [1, 2, 1, 2], iching: 13, tarot_major: ["the_lovers"] },
+      { figure: "carcer", name: "Carcer", key: "Constraint", binary_code: [2, 1, 2, 1], iching: 12, tarot_major: ["the_devil"] },
+      { figure: "fortuna_major", name: "Fortuna Major", key: "Inward Fortune", binary_code: [1, 2, 1, 1], iching: 1, tarot_major: ["the_sun", "strength"] },
+      { figure: "acquisitio", name: "Acquisitio", key: "Gain", binary_code: [1, 1, 2, 2], iching: 11, tarot_major: ["wheel_of_fortune"] },
+      { figure: "amissio", name: "Amissio", key: "Release", binary_code: [2, 2, 1, 1], iching: 2, tarot_major: ["the_hanged_man"] },
+      { figure: "tristitia", name: "Tristitia", key: "Burden", binary_code: [2, 1, 1, 2], iching: 23, tarot_major: ["the_tower", "death"] },
+      { figure: "laetitia", name: "Laetitia", key: "Joy", binary_code: [1, 2, 2, 1], iching: 10, tarot_major: ["the_star"] },
+      { figure: "rubeus", name: "Rubeus", key: "Passion", binary_code: [2, 1, 1, 1], iching: 38, tarot_major: ["the_tower", "strength"] },
+      { figure: "albus", name: "Albus", key: "Intellect", binary_code: [1, 2, 2, 2], iching: 5, tarot_major: ["the_magician", "the_hermit"] },
+      { figure: "fortuna_minor", name: "Fortuna Minor", key: "Swiftness", binary_code: [2, 2, 1, 2], iching: 42, tarot_major: ["the_chariot"] },
+      { figure: "puella", name: "Puella", key: "Receptivity", binary_code: [2, 2, 2, 1], iching: 31, tarot_major: ["the_empress"] },
+      { figure: "puer", name: "Puer", key: "Action", binary_code: [1, 1, 1, 2], iching: 34, tarot_major: ["the_emperor"] },
+      { figure: "caput_draconis", name: "Caput Draconis", key: "Beginning", binary_code: [1, 1, 2, 1], iching: 24, tarot_major: ["the_fool", "judgement"] },
+      { figure: "cauda_draconis", name: "Cauda Draconis", key: "Ending", binary_code: [2, 2, 1, 2], iching: 2, tarot_major: ["death", "the_world"] }
+    ];
+
+    const ICHING_HEXAGRAMS = [
+      null,
+      { number: 1,  name: "Hexagram 1",  keyword: "Creative force" },
+      { number: 2,  name: "Hexagram 2",  keyword: "Receptive earth" },
+      { number: 3,  name: "Hexagram 3",  keyword: "Difficulty at the start" },
+      { number: 4,  name: "Hexagram 4",  keyword: "Youthful folly" },
+      { number: 5,  name: "Hexagram 5",  keyword: "Waiting / nourishment" },
+      { number: 6,  name: "Hexagram 6",  keyword: "Conflict" },
+      { number: 7,  name: "Hexagram 7",  keyword: "The army / effort" },
+      { number: 8,  name: "Hexagram 8",  keyword: "Union / holding together" },
+      { number: 9,  name: "Hexagram 9",  keyword: "Minor restraint" },
+      { number: 10, name: "Hexagram 10", keyword: "Treading / conduct" },
+      { number: 11, name: "Hexagram 11", keyword: "Peace / prosperity" },
+      { number: 12, name: "Hexagram 12", keyword: "Standstill / blockage" },
+      { number: 13, name: "Hexagram 13", keyword: "Fellowship / people" },
+      { number: 14, name: "Hexagram 14", keyword: "Great possession" },
+      { number: 15, name: "Hexagram 15", keyword: "Modesty" },
+      { number: 16, name: "Hexagram 16", keyword: "Enthusiasm" },
+      { number: 17, name: "Hexagram 17", keyword: "Following" },
+      { number: 18, name: "Hexagram 18", keyword: "Repairing the spoiled" },
+      { number: 19, name: "Hexagram 19", keyword: "Approach" },
+      { number: 20, name: "Hexagram 20", keyword: "Contemplation" },
+      { number: 21, name: "Hexagram 21", keyword: "Biting through" },
+      { number: 22, name: "Hexagram 22", keyword: "Grace / adornment" },
+      { number: 23, name: "Hexagram 23", keyword: "Splitting apart" },
+      { number: 24, name: "Hexagram 24", keyword: "Return / turning point" },
+      { number: 25, name: "Hexagram 25", keyword: "Innocence / the unexpected" },
+      { number: 26, name: "Hexagram 26", keyword: "Taming power (great)" },
+      { number: 27, name: "Hexagram 27", keyword: "Mouth / nourishment" },
+      { number: 28, name: "Hexagram 28", keyword: "Great excess" },
+      { number: 29, name: "Hexagram 29", keyword: "The abyss / danger" },
+      { number: 30, name: "Hexagram 30", keyword: "Clinging / fire" },
+      { number: 31, name: "Hexagram 31", keyword: "Influence / attraction" },
+      { number: 32, name: "Hexagram 32", keyword: "Duration / constancy" },
+      { number: 33, name: "Hexagram 33", keyword: "Retreat" },
+      { number: 34, name: "Hexagram 34", keyword: "Great power" },
+      { number: 35, name: "Hexagram 35", keyword: "Progress" },
+      { number: 36, name: "Hexagram 36", keyword: "Darkening of the light" },
+      { number: 37, name: "Hexagram 37", keyword: "The family" },
+      { number: 38, name: "Hexagram 38", keyword: "Opposition" },
+      { number: 39, name: "Hexagram 39", keyword: "Obstruction" },
+      { number: 40, name: "Hexagram 40", keyword: "Deliverance" },
+      { number: 41, name: "Hexagram 41", keyword: "Decrease" },
+      { number: 42, name: "Hexagram 42", keyword: "Increase" },
+      { number: 43, name: "Hexagram 43", keyword: "Breakthrough" },
+      { number: 44, name: "Hexagram 44", keyword: "Coming to meet" },
+      { number: 45, name: "Hexagram 45", keyword: "Gathering together" },
+      { number: 46, name: "Hexagram 46", keyword: "Pushing upward" },
+      { number: 47, name: "Hexagram 47", keyword: "Oppression / exhaustion" },
+      { number: 48, name: "Hexagram 48", keyword: "The well" },
+      { number: 49, name: "Hexagram 49", keyword: "Revolution / molting" },
+      { number: 50, name: "Hexagram 50", keyword: "The cauldron" },
+      { number: 51, name: "Hexagram 51", keyword: "Thunder / shock" },
+      { number: 52, name: "Hexagram 52", keyword: "Mountain / stillness" },
+      { number: 53, name: "Hexagram 53", keyword: "Gradual development" },
+      { number: 54, name: "Hexagram 54", keyword: "The marrying maiden" },
+      { number: 55, name: "Hexagram 55", keyword: "Abundance" },
+      { number: 56, name: "Hexagram 56", keyword: "The wanderer" },
+      { number: 57, name: "Hexagram 57", keyword: "Gentle wind" },
+      { number: 58, name: "Hexagram 58", keyword: "Joyous lake" },
+      { number: 59, name: "Hexagram 59", keyword: "Dispersion" },
+      { number: 60, name: "Hexagram 60", keyword: "Limitation" },
+      { number: 61, name: "Hexagram 61", keyword: "Inner truth" },
+      { number: 62, name: "Hexagram 62", keyword: "Small exceeding" },
+      { number: 63, name: "Hexagram 63", keyword: "After completion" },
+      { number: 64, name: "Hexagram 64", keyword: "Before completion" }
+    ];
+
+    const TAROT_MAJOR_LABELS = {
+      the_fool: "The Fool",
+      the_magician: "The Magician",
+      the_high_priestess: "The High Priestess",
+      the_empress: "The Empress",
+      the_emperor: "The Emperor",
+      the_chariot: "The Chariot",
+      the_lovers: "The Lovers",
+      the_hermit: "The Hermit",
+      the_wheel_of_fortune: "Wheel of Fortune",
+      wheel_of_fortune: "Wheel of Fortune",
+      strength: "Strength",
+      the_hanged_man: "The Hanged Man",
+      death: "Death",
+      the_devil: "The Devil",
+      the_tower: "The Tower",
+      the_star: "The Star",
+      the_moon: "The Moon",
+      the_sun: "The Sun",
+      judgement: "Judgement",
+      the_world: "The World"
+    };
+
+    // Tarot minors → trigrams
+    const TRIGRAM_ORDER = ["qian", "dui", "li", "zhen", "xun", "kan", "gen", "kun"];
+
+    const SUIT_TO_LOWER_TRIGRAM = {
+      wands: "zhen",      // Thunder
+      cups: "kan",        // Water
+      swords: "xun",      // Wind/Wood
+      pentacles: "kun"    // Earth
+    };
+
+    const RANK_TO_UPPER_TRIGRAM = {
+      ace: "qian",
+      "2": "kun",
+      "3": "zhen",
+      "4": "kan",
+      "5": "gen",
+      "6": "xun",
+      "7": "li",
+      "8": "dui",
+      "9": "qian",
+      "10": "kun",
+      page: "zhen",
+      knight: "kan",
+      queen: "xun",
+      king: "li"
+    };
+
+    // ======= HELPERS =======
+
+    const $ = (id) => document.getElementById(id);
+
+    function hexagramFromNumber(num) {
+      if (!num || num < 1 || num > 64) return null;
+      return ICHING_HEXAGRAMS[num];
+    }
+
+    function figureFromHex(num) {
+      return GEOMANTIC_FIGURES.find((f) => f.iching === num) || null;
+    }
+
+    function majorsFromFigure(fig) {
+      if (!fig || !fig.tarot_major) return [];
+      return fig.tarot_major;
+    }
+
+    function trigramPairToHex(upper, lower) {
+      const ui = TRIGRAM_ORDER.indexOf(upper);
+      const li = TRIGRAM_ORDER.indexOf(lower);
+      if (ui === -1 || li === -1) return null;
+      return ui * 8 + li + 1; // 1–64
+    }
+
+    function minorToHexAndFigure(suit, rank) {
+      const lower = SUIT_TO_LOWER_TRIGRAM[suit];
+      const upper = RANK_TO_UPPER_TRIGRAM[rank];
+      if (!lower || !upper) return { hexagram: null, figure: null };
+      const n = trigramPairToHex(upper, lower);
+      const hex = hexagramFromNumber(n);
+      const fig = figureFromHex(n);
+      return { hexagram: hex, figure: fig };
+    }
+
+    function prettyMajors(list) {
+      if (!list || !list.length) return "—";
+      return list
+        .map((id) => TAROT_MAJOR_LABELS[id] || id)
+        .join(" · ");
+    }
+
+    function updatePathway({ figure, hex, majors, source }) {
+      $("lab-figure-name").textContent = figure
+        ? `${figure.name} (${figure.figure})`
+        : "—";
+      $("lab-figure-key").textContent = figure ? figure.key : "";
+
+      $("lab-hex-name").textContent = hex
+        ? `${hex.name} (#${hex.number})`
+        : "—";
+      $("lab-hex-keyword").textContent = hex ? hex.keyword : "";
+
+      $("lab-majors-list").textContent = prettyMajors(majors);
+
+      const summary = [];
+      if (source) summary.push(`Started from ${source}.`);
+      if (figure) summary.push(`State: ${figure.key}.`);
+      if (hex) summary.push(`Process: ${hex.keyword}.`);
+      if (majors && majors.length) summary.push(`Archetypes: ${prettyMajors(majors)}.`);
+
+      $("lab-summary").textContent =
+        summary.length
+          ? summary.join(" ")
+          : "Choose any starting point on the left and watch the triad assemble here: figure → hexagram → Tarot.";
+
+      // pulse nodes
+      document.querySelectorAll(".pathway-node").forEach((n) =>
+        n.classList.remove("active")
+      );
+      if (figure) $("node-geomancy").classList.add("active");
+      if (hex) $("node-hex").classList.add("active");
+      if (majors && majors.length) $("node-tarot").classList.add("active");
+    }
+
+    function buildHexAtlas() {
+      const grid = $("hex-grid");
+      ICHING_HEXAGRAMS.forEach((h) => {
+        if (!h) return;
+        const card = document.createElement("div");
+        card.className = "hex-card";
+        card.title = "Open this pattern in the Oracle.";
+        card.dataset.hex = h.number;
+
+        const num = document.createElement("div");
+        num.className = "hex-card-number";
+        num.textContent = `#${h.number}`;
+
+        const name = document.createElement("div");
+        name.className = "hex-card-name";
+        name.textContent = h.name;
+
+        const key = document.createElement("div");
+        key.className = "hex-card-key";
+        key.textContent = h.keyword;
+
+        card.appendChild(num);
+        card.appendChild(name);
+        card.appendChild(key);
+        card.addEventListener("click", () => {
+          // link back to oracle with ?hex=#
+          window.location.href = `index.html?hex=${encodeURIComponent(
+            h.number
+          )}`;
+        });
+
+        grid.appendChild(card);
+      });
+    }
+
+    function initLabSelects() {
+      // Geomancy
+      const gSel = $("lab-geomancy");
+      GEOMANTIC_FIGURES.forEach((g) => {
+        const opt = document.createElement("option");
+        opt.value = g.figure;
+        opt.textContent = `${g.name} – ${g.key}`;
+        gSel.appendChild(opt);
+      });
+
+      // Majors (from all mapped majors)
+      const mSel = $("lab-major");
+      const uniqueMajors = [...new Set(
+        GEOMANTIC_FIGURES.flatMap((f) => f.tarot_major || [])
+      )].sort();
+      uniqueMajors.forEach((id) => {
+        const opt = document.createElement("option");
+        opt.value = id;
+        opt.textContent = TAROT_MAJOR_LABELS[id] || id;
+        mSel.appendChild(opt);
+      });
+    }
+
+    function fromGeomancyLab() {
+      const value = $("lab-geomancy").value;
+      if (!value) {
+        updatePathway({ figure: null, hex: null, majors: [], source: "" });
+        return;
+      }
+      const figure = GEOMANTIC_FIGURES.find((g) => g.figure === value);
+      const hex = hexagramFromNumber(figure.iching);
+      const majors = majorsFromFigure(figure);
+      $("lab-hex").value = hex ? hex.number : "";
+      $("lab-major").value = "";
+      $("lab-minor-suit").value = "";
+      $("lab-minor-rank").value = "";
+      updatePathway({ figure, hex, majors, source: `Geomantic figure ${figure.name}` });
+    }
+
+    function fromHexLab() {
+      const raw = $("lab-hex").value;
+      const num = parseInt(raw, 10);
+      const hex = hexagramFromNumber(num);
+      if (!hex) {
+        updatePathway({ figure: null, hex: null, majors: [], source: "" });
+        return;
+      }
+      const fig = figureFromHex(num);
+      const majors = majorsFromFigure(fig);
+      $("lab-geomancy").value = fig ? fig.figure : "";
+      $("lab-major").value = "";
+      $("lab-minor-suit").value = "";
+      $("lab-minor-rank").value = "";
+      updatePathway({
+        figure: fig,
+        hex,
+        majors,
+        source: `Hexagram #${num}`
+      });
+    }
+
+    function fromMajorLab() {
+      const id = $("lab-major").value;
+      if (!id) {
+        updatePathway({ figure: null, hex: null, majors: [], source: "" });
+        return;
+      }
+      const fig = GEOMANTIC_FIGURES.find((g) =>
+        (g.tarot_major || []).includes(id)
+      );
+      const hex = fig ? hexagramFromNumber(fig.iching) : null;
+      const majors = fig ? majorsFromFigure(fig) : [id];
+      $("lab-geomancy").value = fig ? fig.figure : "";
+      $("lab-hex").value = hex ? hex.number : "";
+      $("lab-minor-suit").value = "";
+      $("lab-minor-rank").value = "";
+      updatePathway({
+        figure: fig,
+        hex,
+        majors,
+        source: `Tarot Major ${TAROT_MAJOR_LABELS[id] || id}`
+      });
+    }
+
+    function fromMinorLab() {
+      const suit = $("lab-minor-suit").value;
+      const rank = $("lab-minor-rank").value;
+      if (!suit || !rank) {
+        updatePathway({ figure: null, hex: null, majors: [], source: "" });
+        return;
+      }
+      const { hexagram, figure } = minorToHexAndFigure(suit, rank);
+      const hex = hexagram;
+      const majors = figure ? majorsFromFigure(figure) : [];
+      $("lab-geomancy").value = figure ? figure.figure : "";
+      $("lab-hex").value = hex ? hex.number : "";
+      $("lab-major").value = "";
+      const label = `${rank[0].toUpperCase()}${rank.slice(1)} of ${suit[0].toUpperCase()}${suit.slice(1)}`;
+      updatePathway({
+        figure,
+        hex,
+        majors,
+        source: `Tarot Minor ${label}`
+      });
+    }
+
+    function initTutorial() {
+      const overlay = $("tutorial-overlay");
+      const textEl = $("tutorial-step-text");
+      const progressEl = $("tutorial-progress");
+      const nextBtn = $("tutorial-next");
+      const skipBtn = $("tutorial-skip");
+
+      const steps = [
+        "Welcome. This page explains how your Triple Goddess system links Geomancy, the I Ching, and Tarot. You don’t need to know all three to use it.",
+        "The Mapping Lab lets you start from any symbol: a figure, hexagram, Major or Minor, and watch the full triad assemble.",
+        "The Hexagram Atlas below is clickable – any hexagram can be sent back to the Oracle as a starting point.",
+        "Use the Print/PDF button if you want a physical grimoire-style reference of this system."
+      ];
+
+      let index = 0;
+
+      function renderStep() {
+        textEl.innerHTML = steps[index].replace(
+          "Triple Goddess system",
+          "<strong>Triple Goddess system</strong>"
+        );
+        progressEl.textContent = `Step ${index + 1} of ${steps.length}`;
+        nextBtn.textContent = index === steps.length - 1 ? "Done" : "Next";
+      }
+
+      function closeTutorial() {
+        overlay.classList.add("hidden");
+        overlay.setAttribute("aria-hidden", "true");
+        try {
+          localStorage.setItem("tg_systemmap_tutorial_seen", "1");
+        } catch (e) {}
+      }
+
+      nextBtn.addEventListener("click", () => {
+        if (index < steps.length - 1) {
+          index++;
+          renderStep();
+        } else {
+          closeTutorial();
+        }
+      });
+
+      skipBtn.addEventListener("click", closeTutorial);
+
+      // Only show if not seen
+      let seen = false;
+      try {
+        seen = localStorage.getItem("tg_systemmap_tutorial_seen") === "1";
+      } catch (e) {}
+
+      if (!seen) {
+        overlay.classList.remove("hidden");
+        overlay.setAttribute("aria-hidden", "false");
+        renderStep();
+      }
+    }
+
+    function initPrintButton() {
+      $("btn-print").addEventListener("click", () => {
+        window.print();
+      });
+    }
+
+    function init() {
+      initLabSelects();
+      buildHexAtlas();
+      initTutorial();
+      initPrintButton();
+
+      // Lab handlers
+      $("lab-geomancy").addEventListener("change", fromGeomancyLab);
+      $("lab-hex").addEventListener("change", fromHexLab);
+      $("lab-major").addEventListener("change", fromMajorLab);
+      $("lab-minor-suit").addEventListener("change", fromMinorLab);
+      $("lab-minor-rank").addEventListener("change", fromMinorLab);
+
+      // Initial neutral state
+      updatePathway({ figure: null, hex: null, majors: [], source: "" });
+    }
+
+    document.addEventListener("DOMContentLoaded", init);
+  </script>
+</body>
+</html>
