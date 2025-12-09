@@ -1,0 +1,1337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Simulacrum of the Triple Goddess – Oracle</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    :root {
+      --phi: 1.618;
+      --color-salt-bg: #05040a;
+      --color-salt-grid: rgba(255, 255, 255, 0.04);
+      --color-mercury: #c0c8ff;
+      --color-sulfur: #ffb347;
+      --color-salt: #f4f4f4;
+      --border-glow: 1px solid rgba(255, 255, 255, 0.22);
+      --radius-large: 24px;
+      --shadow-soft: 0 0 40px rgba(0, 0, 0, 0.7);
+      --transition-fast: 160ms ease-out;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top, #1b1530 0, transparent 50%),
+        radial-gradient(circle at bottom, #0a111f 0, transparent 55%),
+        #000;
+      color: var(--color-salt);
+      min-height: 100vh;
+      display: flex;
+      align-items: stretch;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .shell {
+      width: min(1100px, 100%);
+      padding: 24px 20px 20px;
+      border-radius: calc(var(--radius-large) * 1.1);
+      background:
+        linear-gradient(
+          to right,
+          var(--color-salt-grid) 1px,
+          transparent 1px
+        ),
+        linear-gradient(
+          to bottom,
+          var(--color-salt-grid) 1px,
+          transparent 1px
+        );
+      background-size:
+        calc(32px * var(--phi)) calc(32px * var(--phi)),
+        calc(32px * var(--phi)) calc(32px * var(--phi));
+      box-shadow: var(--shadow-soft);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .shell::before {
+      content: "";
+      position: absolute;
+      inset: 14%;
+      border-radius: 50%;
+      border: 1px dashed rgba(255, 255, 255, 0.12);
+      box-shadow:
+        0 0 80px rgba(255, 255, 255, 0.04),
+        0 0 140px rgba(192, 200, 255, 0.24);
+      pointer-events: none;
+    }
+
+    .inner {
+      position: relative;
+      z-index: 1;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .title-block h1 {
+      font-size: 1.25rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--color-mercury);
+      margin-bottom: 4px;
+    }
+
+    .title-block p {
+      font-size: 0.82rem;
+      color: rgba(255, 255, 255, 0.8);
+      max-width: 32rem;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      font-size: 0.8rem;
+      text-decoration: none;
+      color: var(--color-mercury);
+      background: rgba(0, 0, 0, 0.65);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: background var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast), border-color var(--transition-fast);
+    }
+
+    .btn:hover {
+      background: rgba(192, 200, 255, 0.12);
+      transform: translateY(-1px);
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.7);
+    }
+
+    .btn-primary {
+      background: radial-gradient(circle at top, #ffeac0, #ffb347);
+      border-color: rgba(0, 0, 0, 0.8);
+      color: #2b1700;
+      font-weight: 600;
+    }
+
+    .btn-primary:hover {
+      background: radial-gradient(circle at top, #fff3d2, #ffc463);
+    }
+
+    .btn-danger {
+      border-color: rgba(255, 80, 80, 0.7);
+      color: #ffcccc;
+    }
+
+    .btn-ghost {
+      border-style: dashed;
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+
+    .btn-small {
+      padding: 4px 8px;
+      font-size: 0.76rem;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+      gap: 16px;
+    }
+
+    @media (max-width: 900px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .oracle-panel,
+    .lab-panel {
+      border-radius: 18px;
+      border: var(--border-glow);
+      background: rgba(0, 0, 0, 0.78);
+      padding: 12px;
+    }
+
+    h2 {
+      margin-top: 0;
+      margin-bottom: 6px;
+      font-size: 0.95rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    p {
+      font-size: 0.85rem;
+      line-height: 1.5;
+      color: rgba(255, 255, 255, 0.9);
+      margin-bottom: 6px;
+    }
+
+    textarea {
+      width: 100%;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      background: rgba(5, 6, 14, 0.9);
+      color: var(--color-salt);
+      padding: 8px 10px;
+      font-size: 0.82rem;
+      min-height: 60px;
+      resize: vertical;
+      outline: none;
+    }
+
+    textarea:focus {
+      border-color: var(--color-mercury);
+      box-shadow: 0 0 0 1px rgba(192, 200, 255, 0.5);
+    }
+
+    .button-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 8px;
+      margin-bottom: 8px;
+    }
+
+    .coins-grid {
+      margin-top: 8px;
+      border-radius: 14px;
+      border: 1px dashed rgba(255, 255, 255, 0.3);
+      padding: 8px;
+      font-size: 0.8rem;
+    }
+
+    .coin-row-label {
+      font-size: 0.76rem;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: rgba(255, 255, 255, 0.7);
+      margin-bottom: 2px;
+    }
+
+    .coin-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 4px;
+    }
+
+    .coin {
+      width: 20px;
+      height: 20px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.72rem;
+    }
+
+    .coin-heads {
+      background: radial-gradient(circle at top, #ffeac0, #ffb347);
+      color: #2b1700;
+    }
+
+    .coin-tails {
+      background: radial-gradient(circle at top, #c0c8ff, #4b567f);
+      color: #05040a;
+    }
+
+    .coin-code {
+      margin-left: auto;
+      font-size: 0.76rem;
+      color: rgba(255, 255, 255, 0.75);
+    }
+
+    .input-stack {
+      margin-top: 10px;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      font-size: 0.8rem;
+    }
+
+    @media (max-width: 600px) {
+      .input-stack {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .field-label {
+      font-size: 0.73rem;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: rgba(255, 255, 255, 0.7);
+      margin-bottom: 2px;
+    }
+
+    select,
+    input[type="number"] {
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      background: rgba(5, 6, 14, 0.9);
+      color: var(--color-salt);
+      padding: 6px 10px;
+      font-size: 0.8rem;
+      outline: none;
+      min-width: 0;
+      width: 100%;
+    }
+
+    select:focus,
+    input[type="number"]:focus {
+      border-color: var(--color-mercury);
+      box-shadow: 0 0 0 1px rgba(192, 200, 255, 0.5);
+    }
+
+    .triad-grid {
+      margin-top: 10px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+      font-size: 0.78rem;
+    }
+
+    @media (max-width: 800px) {
+      .triad-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .triad-card {
+      border-radius: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      background: rgba(0, 0, 0, 0.85);
+      padding: 8px 9px;
+    }
+
+    .triad-title {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: rgba(255, 255, 255, 0.85);
+      margin-bottom: 4px;
+    }
+
+    .triad-main {
+      font-size: 0.84rem;
+      font-weight: 600;
+      color: var(--color-sulfur);
+      margin-bottom: 2px;
+    }
+
+    .triad-sub {
+      font-size: 0.78rem;
+      color: rgba(255, 255, 255, 0.85);
+      margin-bottom: 2px;
+    }
+
+    .triad-meta {
+      font-size: 0.74rem;
+      color: rgba(255, 255, 255, 0.75);
+    }
+
+    .question-note {
+      font-size: 0.76rem;
+      color: rgba(255, 255, 255, 0.7);
+      margin-top: 3px;
+    }
+
+    /* Lab panel / pathway (mostly shared with system-map) */
+
+    .lab-panel h2 {
+      margin-bottom: 4px;
+    }
+
+    .lab-note {
+      font-size: 0.75rem;
+      color: rgba(255, 255, 255, 0.75);
+      margin-top: 4px;
+      margin-bottom: 6px;
+    }
+
+    .lab {
+      border-radius: 16px;
+      border: var(--border-glow);
+      background: rgba(0, 0, 0, 0.72);
+      padding: 10px;
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    @media (max-width: 900px) {
+      .lab {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .lab-controls {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .field-row {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .pathway {
+      border-radius: 16px;
+      border: var(--border-glow);
+      background: radial-gradient(circle at top, rgba(255, 255, 255, 0.06), rgba(0, 0, 0, 0.95));
+      padding: 8px;
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 1.1fr);
+      gap: 6px;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    @media (max-width: 900px) {
+      .pathway {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .pathway-svg-wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .pathway-svg {
+      width: 100%;
+      max-width: 260px;
+    }
+
+    .pathway-node {
+      transition: transform var(--transition-fast), filter var(--transition-fast);
+    }
+
+    .pathway-node.active {
+      transform: scale(1.06);
+      filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.7));
+    }
+
+    .pathway-line {
+      stroke-dasharray: 160;
+      stroke-dashoffset: 160;
+      animation: draw-line 0.85s ease-out forwards;
+    }
+
+    @keyframes draw-line {
+      to {
+        stroke-dashoffset: 0;
+      }
+    }
+
+    .pathway-info {
+      font-size: 0.78rem;
+    }
+
+    .pathway-info strong {
+      color: var(--color-sulfur);
+    }
+
+    .lab-summary {
+      font-size: 0.78rem;
+      color: rgba(255, 255, 255, 0.9);
+      margin-bottom: 4px;
+    }
+
+    .lab-small {
+      font-size: 0.75rem;
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    .link-system-map {
+      font-size: 0.78rem;
+      color: var(--color-mercury);
+      text-decoration: underline;
+      text-decoration-style: dotted;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <div class="inner">
+      <header>
+        <div class="title-block">
+          <h1>Triple Goddess Oracle</h1>
+          <p>
+            Ask a question, cast 12 coins, or start from any symbol. The engine returns:
+            <em>Geomancy (state)</em> + <em>Hexagram (process)</em> + <em>Tarot (story)</em>.
+          </p>
+        </div>
+        <div class="header-actions">
+          <a href="system-map.html" class="btn" title="See the full system &amp; mapping tables.">
+            🗺 System Map
+          </a>
+        </div>
+      </header>
+
+      <div class="layout">
+        <!-- ORACLE SIDE -->
+        <section class="oracle-panel" aria-label="Oracle">
+          <h2>Cast &amp; Interpret</h2>
+          <label class="field-label" for="question">Question</label>
+          <textarea id="question" placeholder="What do you want to ask the Triple Goddess?"></textarea>
+          <div class="question-note">
+            Tip: phrase in terms of <em>process</em> (“How is this unfolding?”, “What is the nature of…?”).
+          </div>
+
+          <div class="button-row">
+            <button class="btn btn-primary" id="btn-cast" title="Use the 12-coin geomantic protocol.">
+              🪙 Cast 12 Coins
+            </button>
+
+            <button class="btn" id="btn-from-geomancy" title="Start from a Geomantic figure.">
+              ✳️ Use Geomantic Figure
+            </button>
+
+            <button class="btn" id="btn-from-hexagram" title="Start from an I Ching hexagram number.">
+              ☯️ Use Hexagram #
+            </button>
+
+            <button class="btn" id="btn-from-major" title="Start from a Tarot Major Arcana card.">
+              🎴 Use Tarot Major
+            </button>
+
+            <button class="btn" id="btn-from-minor" title="Start from a Tarot Minor Arcana card.">
+              🃏 Use Tarot Minor
+            </button>
+
+            <button class="btn btn-ghost btn-small" id="btn-random-question" title="Ask something archetypal and open-ended.">
+              ✨ Random Question
+            </button>
+
+            <button class="btn btn-danger btn-small" id="btn-clear" title="Clear question, coins, and output.">
+              ⟳ Clear
+            </button>
+          </div>
+
+          <div class="coins-grid" aria-label="12-coin result">
+            <div class="coin-row-label">12 Coins → 4-line figure</div>
+
+            <div class="coin-row" id="row-fire">
+              <span>Fire</span>
+              <div class="coin-row-coins"></div>
+              <span class="coin-code" data-row="fire">–</span>
+            </div>
+
+            <div class="coin-row" id="row-air">
+              <span>Air</span>
+              <div class="coin-row-coins"></div>
+              <span class="coin-code" data-row="air">–</span>
+            </div>
+
+            <div class="coin-row" id="row-water">
+              <span>Water</span>
+              <div class="coin-row-coins"></div>
+              <span class="coin-code" data-row="water">–</span>
+            </div>
+
+            <div class="coin-row" id="row-earth">
+              <span>Earth</span>
+              <div class="coin-row-coins"></div>
+              <span class="coin-code" data-row="earth">–</span>
+            </div>
+          </div>
+
+          <!-- Manual inputs -->
+          <div class="input-stack">
+            <div>
+              <div class="field-label">Geomantic Figure</div>
+              <select id="select-geomancy">
+                <option value="">– choose a figure –</option>
+              </select>
+            </div>
+
+            <div>
+              <div class="field-label">Hexagram # (1–64)</div>
+              <input id="input-hex" type="number" min="1" max="64" placeholder="e.g. 10, 12, 53…" />
+            </div>
+
+            <div>
+              <div class="field-label">Tarot Major</div>
+              <select id="select-major">
+                <option value="">– choose a major –</option>
+              </select>
+            </div>
+
+            <div>
+              <div class="field-label">Tarot Minor</div>
+              <div class="field-row">
+                <select id="select-minor-suit">
+                  <option value="">Suit</option>
+                  <option value="wands">Wands</option>
+                  <option value="cups">Cups</option>
+                  <option value="swords">Swords</option>
+                  <option value="pentacles">Pentacles</option>
+                </select>
+                <select id="select-minor-rank">
+                  <option value="">Rank</option>
+                  <option value="ace">Ace</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+                  <option value="6">6</option>
+                  <option value="7">7</option>
+                  <option value="8">8</option>
+                  <option value="9">9</option>
+                  <option value="10">10</option>
+                  <option value="page">Page</option>
+                  <option value="knight">Knight</option>
+                  <option value="queen">Queen</option>
+                  <option value="king">King</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Triad display -->
+          <div class="triad-grid" aria-label="Current triad">
+            <div class="triad-card">
+              <div class="triad-title">State – Geomancy</div>
+              <div class="triad-main" id="triad-figure-name">—</div>
+              <div class="triad-sub" id="triad-figure-key"></div>
+              <div class="triad-meta" id="triad-figure-meta"></div>
+            </div>
+            <div class="triad-card">
+              <div class="triad-title">Process – Hexagram</div>
+              <div class="triad-main" id="triad-hex-name">—</div>
+              <div class="triad-sub" id="triad-hex-keyword"></div>
+              <div class="triad-meta" id="triad-hex-meta"></div>
+            </div>
+            <div class="triad-card">
+              <div class="triad-title">Story – Tarot</div>
+              <div class="triad-main" id="triad-majors-list">—</div>
+              <div class="triad-sub" id="triad-majors-note"></div>
+              <div class="triad-meta" id="triad-source"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- LAB SIDE -->
+        <section class="lab-panel" aria-label="Learn / Mapping lab">
+          <h2>Mapping Lab</h2>
+          <p class="lab-note">
+            Start from any symbol to see how the engine builds a triad. This panel is
+            educational, but it drives the same reading you see on the left.
+          </p>
+
+          <div class="lab">
+            <div class="lab-controls">
+              <div>
+                <div class="field-label">Start from Geomancy</div>
+                <select id="lab-geomancy">
+                  <option value="">– choose a figure –</option>
+                </select>
+              </div>
+
+              <div>
+                <div class="field-label">Start from Hexagram # (1–64)</div>
+                <input id="lab-hex" type="number" min="1" max="64" placeholder="e.g. 10, 12, 53…" />
+              </div>
+
+              <div>
+                <div class="field-label">Start from Tarot Major</div>
+                <select id="lab-major">
+                  <option value="">– choose a major –</option>
+                </select>
+              </div>
+
+              <div>
+                <div class="field-label">Start from Tarot Minor</div>
+                <div class="field-row">
+                  <select id="lab-minor-suit">
+                    <option value="">Suit</option>
+                    <option value="wands">Wands</option>
+                    <option value="cups">Cups</option>
+                    <option value="swords">Swords</option>
+                    <option value="pentacles">Pentacles</option>
+                  </select>
+                  <select id="lab-minor-rank">
+                    <option value="">Rank</option>
+                    <option value="ace">Ace</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                    <option value="10">10</option>
+                    <option value="page">Page</option>
+                    <option value="knight">Knight</option>
+                    <option value="queen">Queen</option>
+                    <option value="king">King</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div class="pathway">
+              <div class="pathway-svg-wrapper">
+                <svg class="pathway-svg" viewBox="0 0 320 160" aria-hidden="true">
+                  <!-- Lines -->
+                  <line x1="60" y1="80" x2="160" y2="80" stroke="#ffb347" stroke-width="2" class="pathway-line" />
+                  <line x1="160" y1="80" x2="260" y2="80" stroke="#c0c8ff" stroke-width="2" class="pathway-line" />
+
+                  <!-- Geomancy node -->
+                  <g id="node-geomancy" class="pathway-node">
+                    <circle cx="60" cy="80" r="26" fill="rgba(255,255,255,0.06)" stroke="#ffb347" stroke-width="2" />
+                    <text x="60" y="84" text-anchor="middle" font-size="9" fill="#ffb347">
+                      GEOMANCY
+                    </text>
+                  </g>
+
+                  <!-- Hexagram node -->
+                  <g id="node-hex" class="pathway-node">
+                    <rect x="140" y="58" width="40" height="44" rx="6"
+                          fill="rgba(255,255,255,0.07)" stroke="#f4f4f4" stroke-width="2" />
+                    <!-- simple 6-line glyph -->
+                    <line x1="146" y1="64" x2="174" y2="64" stroke="#f4f4f4" stroke-width="2" />
+                    <line x1="146" y1="70" x2="174" y2="70" stroke="#f4f4f4" stroke-width="2" />
+                    <line x1="146" y1="76" x2="174" y2="76" stroke="#f4f4f4" stroke-width="2" />
+                    <line x1="146" y1="82" x2="174" y2="82" stroke="#f4f4f4" stroke-width="2" />
+                    <line x1="146" y1="88" x2="174" y2="88" stroke="#f4f4f4" stroke-width="2" />
+                    <line x1="146" y1="94" x2="174" y2="94" stroke="#f4f4f4" stroke-width="2" />
+                  </g>
+
+                  <!-- Tarot node -->
+                  <g id="node-tarot" class="pathway-node">
+                    <rect x="238" y="56" width="44" height="48" rx="6"
+                          fill="rgba(255,255,255,0.04)" stroke="#c0c8ff" stroke-width="2" />
+                    <text x="260" y="83" text-anchor="middle" font-size="9" fill="#c0c8ff">
+                      TAROT
+                    </text>
+                  </g>
+                </svg>
+              </div>
+              <div class="pathway-info">
+                <p id="lab-summary" class="lab-summary">
+                  Choose any starting point on the left and watch the triad assemble:
+                  <strong>figure → hexagram → Tarot</strong>.
+                </p>
+                <p class="lab-small">
+                  <strong>Figure:</strong> <span id="lab-figure-name">—</span><br />
+                  <span id="lab-figure-key"></span>
+                </p>
+                <p class="lab-small">
+                  <strong>Hexagram:</strong> <span id="lab-hex-name">—</span><br />
+                  <span id="lab-hex-keyword"></span>
+                </p>
+                <p class="lab-small">
+                  <strong>Tarot Majors:</strong> <span id="lab-majors-list">—</span>
+                </p>
+              </div>
+            </div>
+
+          <p class="lab-small">
+            For a full write-up of the theory, examples, and a 64-hex atlas, visit
+            <span class="link-system-map" onclick="window.location.href='system-map.html'">the System Map page</span>.
+          </p>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // ======= CORE DATA (shared with system-map) =======
+
+    const GEOMANTIC_FIGURES = [
+      { figure: "via", name: "Via", key: "The Path", binary_code: [1, 1, 1, 1], iching: 53, tarot_major: ["the_chariot"] },
+      { figure: "populus", name: "Populus", key: "The Collective", binary_code: [2, 2, 2, 2], iching: 8, tarot_major: ["the_high_priestess", "the_moon"] },
+      { figure: "conjunctio", name: "Conjunctio", key: "The Bond", binary_code: [1, 2, 1, 2], iching: 13, tarot_major: ["the_lovers"] },
+      { figure: "carcer", name: "Carcer", key: "Constraint", binary_code: [2, 1, 2, 1], iching: 12, tarot_major: ["the_devil"] },
+      { figure: "fortuna_major", name: "Fortuna Major", key: "Inward Fortune", binary_code: [1, 2, 1, 1], iching: 1, tarot_major: ["the_sun", "strength"] },
+      { figure: "acquisitio", name: "Acquisitio", key: "Gain", binary_code: [1, 1, 2, 2], iching: 11, tarot_major: ["wheel_of_fortune"] },
+      { figure: "amissio", name: "Amissio", key: "Release", binary_code: [2, 2, 1, 1], iching: 2, tarot_major: ["the_hanged_man"] },
+      { figure: "tristitia", name: "Tristitia", key: "Burden", binary_code: [2, 1, 1, 2], iching: 23, tarot_major: ["the_tower", "death"] },
+      { figure: "laetitia", name: "Laetitia", key: "Joy", binary_code: [1, 2, 2, 1], iching: 10, tarot_major: ["the_star"] },
+      { figure: "rubeus", name: "Rubeus", key: "Passion", binary_code: [2, 1, 1, 1], iching: 38, tarot_major: ["the_tower", "strength"] },
+      { figure: "albus", name: "Albus", key: "Intellect", binary_code: [1, 2, 2, 2], iching: 5, tarot_major: ["the_magician", "the_hermit"] },
+      { figure: "fortuna_minor", name: "Fortuna Minor", key: "Swiftness", binary_code: [2, 2, 1, 2], iching: 42, tarot_major: ["the_chariot"] },
+      { figure: "puella", name: "Puella", key: "Receptivity", binary_code: [2, 2, 2, 1], iching: 31, tarot_major: ["the_empress"] },
+      { figure: "puer", name: "Puer", key: "Action", binary_code: [1, 1, 1, 2], iching: 34, tarot_major: ["the_emperor"] },
+      { figure: "caput_draconis", name: "Caput Draconis", key: "Beginning", binary_code: [1, 1, 2, 1], iching: 24, tarot_major: ["the_fool", "judgement"] },
+      { figure: "cauda_draconis", name: "Cauda Draconis", key: "Ending", binary_code: [2, 2, 1, 2], iching: 2, tarot_major: ["death", "the_world"] }
+    ];
+
+    const ICHING_HEXAGRAMS = [
+      null,
+      { number: 1,  name: "Hexagram 1",  keyword: "Creative force" },
+      { number: 2,  name: "Hexagram 2",  keyword: "Receptive earth" },
+      { number: 3,  name: "Hexagram 3",  keyword: "Difficulty at the start" },
+      { number: 4,  name: "Hexagram 4",  keyword: "Youthful folly" },
+      { number: 5,  name: "Hexagram 5",  keyword: "Waiting / nourishment" },
+      { number: 6,  name: "Hexagram 6",  keyword: "Conflict" },
+      { number: 7,  name: "Hexagram 7",  keyword: "The army / effort" },
+      { number: 8,  name: "Hexagram 8",  keyword: "Union / holding together" },
+      { number: 9,  name: "Hexagram 9",  keyword: "Minor restraint" },
+      { number: 10, name: "Hexagram 10", keyword: "Treading / conduct" },
+      { number: 11, name: "Hexagram 11", keyword: "Peace / prosperity" },
+      { number: 12, name: "Hexagram 12", keyword: "Standstill / blockage" },
+      { number: 13, name: "Hexagram 13", keyword: "Fellowship / people" },
+      { number: 14, name: "Hexagram 14", keyword: "Great possession" },
+      { number: 15, name: "Hexagram 15", keyword: "Modesty" },
+      { number: 16, name: "Hexagram 16", keyword: "Enthusiasm" },
+      { number: 17, name: "Hexagram 17", keyword: "Following" },
+      { number: 18, name: "Hexagram 18", keyword: "Repairing the spoiled" },
+      { number: 19, name: "Hexagram 19", keyword: "Approach" },
+      { number: 20, name: "Hexagram 20", keyword: "Contemplation" },
+      { number: 21, name: "Hexagram 21", keyword: "Biting through" },
+      { number: 22, name: "Hexagram 22", keyword: "Grace / adornment" },
+      { number: 23, name: "Hexagram 23", keyword: "Splitting apart" },
+      { number: 24, name: "Hexagram 24", keyword: "Return / turning point" },
+      { number: 25, name: "Hexagram 25", keyword: "Innocence / the unexpected" },
+      { number: 26, name: "Hexagram 26", keyword: "Taming power (great)" },
+      { number: 27, name: "Hexagram 27", keyword: "Mouth / nourishment" },
+      { number: 28, name: "Hexagram 28", keyword: "Great excess" },
+      { number: 29, name: "Hexagram 29", keyword: "The abyss / danger" },
+      { number: 30, name: "Hexagram 30", keyword: "Clinging / fire" },
+      { number: 31, name: "Hexagram 31", keyword: "Influence / attraction" },
+      { number: 32, name: "Hexagram 32", keyword: "Duration / constancy" },
+      { number: 33, name: "Hexagram 33", keyword: "Retreat" },
+      { number: 34, name: "Hexagram 34", keyword: "Great power" },
+      { number: 35, name: "Hexagram 35", keyword: "Progress" },
+      { number: 36, name: "Hexagram 36", keyword: "Darkening of the light" },
+      { number: 37, name: "Hexagram 37", keyword: "The family" },
+      { number: 38, name: "Hexagram 38", keyword: "Opposition" },
+      { number: 39, name: "Hexagram 39", keyword: "Obstruction" },
+      { number: 40, name: "Hexagram 40", keyword: "Deliverance" },
+      { number: 41, name: "Hexagram 41", keyword: "Decrease" },
+      { number: 42, name: "Hexagram 42", keyword: "Increase" },
+      { number: 43, name: "Hexagram 43", keyword: "Breakthrough" },
+      { number: 44, name: "Hexagram 44", keyword: "Coming to meet" },
+      { number: 45, name: "Hexagram 45", keyword: "Gathering together" },
+      { number: 46, name: "Hexagram 46", keyword: "Pushing upward" },
+      { number: 47, name: "Hexagram 47", keyword: "Oppression / exhaustion" },
+      { number: 48, name: "Hexagram 48", keyword: "The well" },
+      { number: 49, name: "Hexagram 49", keyword: "Revolution / molting" },
+      { number: 50, name: "Hexagram 50", keyword: "The cauldron" },
+      { number: 51, name: "Hexagram 51", keyword: "Thunder / shock" },
+      { number: 52, name: "Hexagram 52", keyword: "Mountain / stillness" },
+      { number: 53, name: "Hexagram 53", keyword: "Gradual development" },
+      { number: 54, name: "Hexagram 54", keyword: "The marrying maiden" },
+      { number: 55, name: "Hexagram 55", keyword: "Abundance" },
+      { number: 56, name: "Hexagram 56", keyword: "The wanderer" },
+      { number: 57, name: "Hexagram 57", keyword: "Gentle wind" },
+      { number: 58, name: "Hexagram 58", keyword: "Joyous lake" },
+      { number: 59, name: "Hexagram 59", keyword: "Dispersion" },
+      { number: 60, name: "Hexagram 60", keyword: "Limitation" },
+      { number: 61, name: "Hexagram 61", keyword: "Inner truth" },
+      { number: 62, name: "Hexagram 62", keyword: "Small exceeding" },
+      { number: 63, name: "Hexagram 63", keyword: "After completion" },
+      { number: 64, name: "Hexagram 64", keyword: "Before completion" }
+    ];
+
+    const TAROT_MAJOR_LABELS = {
+      the_fool: "The Fool",
+      the_magician: "The Magician",
+      the_high_priestess: "The High Priestess",
+      the_empress: "The Empress",
+      the_emperor: "The Emperor",
+      the_chariot: "The Chariot",
+      the_lovers: "The Lovers",
+      the_hermit: "The Hermit",
+      wheel_of_fortune: "Wheel of Fortune",
+      the_wheel_of_fortune: "Wheel of Fortune",
+      strength: "Strength",
+      the_hanged_man: "The Hanged Man",
+      death: "Death",
+      the_devil: "The Devil",
+      the_tower: "The Tower",
+      the_star: "The Star",
+      the_moon: "The Moon",
+      the_sun: "The Sun",
+      judgement: "Judgement",
+      the_world: "The World"
+    };
+
+    // Trigrams for minors
+    const TRIGRAM_ORDER = ["qian", "dui", "li", "zhen", "xun", "kan", "gen", "kun"];
+
+    const SUIT_TO_LOWER_TRIGRAM = {
+      wands: "zhen",
+      cups: "kan",
+      swords: "xun",
+      pentacles: "kun"
+    };
+
+    const RANK_TO_UPPER_TRIGRAM = {
+      ace: "qian",
+      "2": "kun",
+      "3": "zhen",
+      "4": "kan",
+      "5": "gen",
+      "6": "xun",
+      "7": "li",
+      "8": "dui",
+      "9": "qian",
+      "10": "kun",
+      page: "zhen",
+      knight: "kan",
+      queen: "xun",
+      king: "li"
+    };
+
+    const $ = (id) => document.getElementById(id);
+
+    function hexagramFromNumber(num) {
+      if (!num || num < 1 || num > 64) return null;
+      return ICHING_HEXAGRAMS[num];
+    }
+
+    function figureFromHex(num) {
+      return GEOMANTIC_FIGURES.find((f) => f.iching === num) || null;
+    }
+
+    function majorsFromFigure(fig) {
+      if (!fig || !fig.tarot_major) return [];
+      return fig.tarot_major;
+    }
+
+    function trigramPairToHex(upper, lower) {
+      const ui = TRIGRAM_ORDER.indexOf(upper);
+      const li = TRIGRAM_ORDER.indexOf(lower);
+      if (ui === -1 || li === -1) return null;
+      return ui * 8 + li + 1;
+    }
+
+    function minorToHexAndFigure(suit, rank) {
+      const lower = SUIT_TO_LOWER_TRIGRAM[suit];
+      const upper = RANK_TO_UPPER_TRIGRAM[rank];
+      if (!lower || !upper) return { hexagram: null, figure: null };
+      const n = trigramPairToHex(upper, lower);
+      const hex = hexagramFromNumber(n);
+      const fig = figureFromHex(n);
+      return { hexagram: hex, figure: fig };
+    }
+
+    function prettyMajors(list) {
+      if (!list || !list.length) return "—";
+      return list
+        .map((id) => TAROT_MAJOR_LABELS[id] || id)
+        .join(" · ");
+    }
+
+    // ======= RENDERING TRIAD (shared by oracle + lab) =======
+
+    function updateTriad({ figure, hex, majors, source }) {
+      // Oracle triad cards
+      $("triad-figure-name").textContent = figure
+        ? `${figure.name} (${figure.figure})`
+        : "—";
+      $("triad-figure-key").textContent = figure ? figure.key : "";
+      $("triad-figure-meta").textContent = figure
+        ? `Binary: [${figure.binary_code.join(", ")}]`
+        : "";
+
+      $("triad-hex-name").textContent = hex
+        ? `${hex.name} (#${hex.number})`
+        : "—";
+      $("triad-hex-keyword").textContent = hex ? hex.keyword : "";
+      $("triad-hex-meta").textContent = hex
+        ? "I Ching process"
+        : "";
+
+      const majorsLabel = prettyMajors(majors);
+      $("triad-majors-list").textContent = majorsLabel;
+      $("triad-majors-note").textContent =
+        majors && majors.length
+          ? "Archetypal images echoing the figure."
+          : "";
+
+      $("triad-source").textContent = source ? `Source: ${source}` : "";
+
+      // Lab summary + nodes
+      $("lab-figure-name").textContent = figure
+        ? `${figure.name} (${figure.figure})`
+        : "—";
+      $("lab-figure-key").textContent = figure ? figure.key : "";
+
+      $("lab-hex-name").textContent = hex
+        ? `${hex.name} (#${hex.number})`
+        : "—";
+      $("lab-hex-keyword").textContent = hex ? hex.keyword : "";
+
+      $("lab-majors-list").textContent = majorsLabel;
+
+      const summaryParts = [];
+      if (source) summaryParts.push(`Started from ${source}.`);
+      if (figure) summaryParts.push(`State: ${figure.key}.`);
+      if (hex) summaryParts.push(`Process: ${hex.keyword}.`);
+      if (majors && majors.length)
+        summaryParts.push(`Archetypes: ${majorsLabel}.`);
+
+      $("lab-summary").textContent =
+        summaryParts.length
+          ? summaryParts.join(" ")
+          : "Choose any starting point on the left and watch the triad assemble.";
+
+      document.querySelectorAll(".pathway-node").forEach((n) =>
+        n.classList.remove("active")
+      );
+      if (figure) $("node-geomancy").classList.add("active");
+      if (hex) $("node-hex").classList.add("active");
+      if (majors && majors.length) $("node-tarot").classList.add("active");
+    }
+
+    // ======= ORACLE: COINS, BUTTONS =======
+
+    function randomCoin() {
+      return Math.random() < 0.5 ? "H" : "T";
+    }
+
+    function castCoins() {
+      const rows = ["fire", "air", "water", "earth"];
+      const code = [];
+      rows.forEach((row) => {
+        const container = document.querySelector(`#row-${row} .coin-row-coins`);
+        container.innerHTML = "";
+        const coins = [];
+        for (let i = 0; i < 3; i++) {
+          const c = randomCoin();
+          coins.push(c);
+          const el = document.createElement("div");
+          el.className = "coin " + (c === "H" ? "coin-heads" : "coin-tails");
+          el.textContent = c;
+          container.appendChild(el);
+        }
+        const heads = coins.filter((c) => c === "H").length;
+        const val = heads % 2 === 1 ? 1 : 2;
+        code.push(val);
+        const codeSpan = document.querySelector(`.coin-code[data-row="${row}"]`);
+        codeSpan.textContent = `${heads}H → ${val}`;
+      });
+
+      // Find figure by binary code
+      const fig = GEOMANTIC_FIGURES.find((f) =>
+        f.binary_code.length === code.length &&
+        f.binary_code.every((v, i) => v === code[i])
+      );
+      const hex = fig ? hexagramFromNumber(fig.iching) : null;
+      const majors = fig ? majorsFromFigure(fig) : [];
+
+      // sync manual selects
+      $("select-geomancy").value = fig ? fig.figure : "";
+      $("input-hex").value = hex ? hex.number : "";
+      $("select-major").value = "";
+      $("select-minor-suit").value = "";
+      $("select-minor-rank").value = "";
+
+      const source = "12-coin cast";
+      updateTriad({ figure: fig, hex, majors, source });
+    }
+
+    function useGeomancy() {
+      const value = $("select-geomancy").value;
+      if (!value) {
+        updateTriad({ figure: null, hex: null, majors: [], source: "" });
+        return;
+      }
+      const fig = GEOMANTIC_FIGURES.find((g) => g.figure === value);
+      const hex = hexagramFromNumber(fig.iching);
+      const majors = majorsFromFigure(fig);
+      $("input-hex").value = hex ? hex.number : "";
+      $("select-major").value = "";
+      $("select-minor-suit").value = "";
+      $("select-minor-rank").value = "";
+      updateTriad({ figure: fig, hex, majors, source: `Geomantic figure ${fig.name}` });
+
+      // mirror into lab
+      $("lab-geomancy").value = fig.figure;
+      $("lab-hex").value = hex ? hex.number : "";
+      $("lab-major").value = "";
+      $("lab-minor-suit").value = "";
+      $("lab-minor-rank").value = "";
+    }
+
+    function useHexagram() {
+      const raw = $("input-hex").value;
+      const num = parseInt(raw, 10);
+      const hex = hexagramFromNumber(num);
+      if (!hex) {
+        updateTriad({ figure: null, hex: null, majors: [], source: "" });
+        return;
+      }
+      const fig = figureFromHex(num);
+      const majors = majorsFromFigure(fig);
+      $("select-geomancy").value = fig ? fig.figure : "";
+      $("select-major").value = "";
+      $("select-minor-suit").value = "";
+      $("select-minor-rank").value = "";
+      updateTriad({ figure: fig, hex, majors, source: `Hexagram #${num}` });
+
+      $("lab-geomancy").value = fig ? fig.figure : "";
+      $("lab-hex").value = num || "";
+      $("lab-major").value = "";
+      $("lab-minor-suit").value = "";
+      $("lab-minor-rank").value = "";
+    }
+
+    function useMajor() {
+      const id = $("select-major").value;
+      if (!id) {
+        updateTriad({ figure: null, hex: null, majors: [], source: "" });
+        return;
+      }
+      const fig = GEOMANTIC_FIGURES.find((g) =>
+        (g.tarot_major || []).includes(id)
+      );
+      const hex = fig ? hexagramFromNumber(fig.iching) : null;
+      const majors = fig ? majorsFromFigure(fig) : [id];
+      $("select-geomancy").value = fig ? fig.figure : "";
+      $("input-hex").value = hex ? hex.number : "";
+      $("select-minor-suit").value = "";
+      $("select-minor-rank").value = "";
+      const label = TAROT_MAJOR_LABELS[id] || id;
+      updateTriad({ figure: fig, hex, majors, source: `Tarot Major ${label}` });
+
+      $("lab-geomancy").value = fig ? fig.figure : "";
+      $("lab-hex").value = hex ? hex.number : "";
+      $("lab-major").value = id;
+      $("lab-minor-suit").value = "";
+      $("lab-minor-rank").value = "";
+    }
+
+    function useMinor() {
+      const suit = $("select-minor-suit").value;
+      const rank = $("select-minor-rank").value;
+      if (!suit || !rank) {
+        updateTriad({ figure: null, hex: null, majors: [], source: "" });
+        return;
+      }
+      const { hexagram, figure } = minorToHexAndFigure(suit, rank);
+      const hex = hexagram;
+      const majors = figure ? majorsFromFigure(figure) : [];
+      $("select-geomancy").value = figure ? figure.figure : "";
+      $("input-hex").value = hex ? hex.number : "";
+      $("select-major").value = "";
+      const label = `${rank[0].toUpperCase()}${rank.slice(1)} of ${suit[0].toUpperCase()}${suit.slice(1)}`;
+      updateTriad({ figure, hex, majors, source: `Tarot Minor ${label}` });
+
+      $("lab-geomancy").value = figure ? figure.figure : "";
+      $("lab-hex").value = hex ? hex.number : "";
+      $("lab-major").value = "";
+      $("lab-minor-suit").value = suit;
+      $("lab-minor-rank").value = rank;
+    }
+
+    function randomQuestion() {
+      const templates = [
+        "What is the nature of my current path?",
+        "How is this relationship unfolding beneath the surface?",
+        "What unseen factors shape this decision?",
+        "Where is my energy best invested now?",
+        "What pattern is repeating that I need to see clearly?"
+      ];
+      const q = templates[Math.floor(Math.random() * templates.length)];
+      $("question").value = q;
+    }
+
+    function clearAll() {
+      $("question").value = "";
+      document.querySelectorAll(".coin-row-coins").forEach((c) => (c.innerHTML = ""));
+      document.querySelectorAll(".coin-code").forEach((c) => (c.textContent = "–"));
+      $("select-geomancy").value = "";
+      $("input-hex").value = "";
+      $("select-major").value = "";
+      $("select-minor-suit").value = "";
+      $("select-minor-rank").value = "";
+      $("lab-geomancy").value = "";
+      $("lab-hex").value = "";
+      $("lab-major").value = "";
+      $("lab-minor-suit").value = "";
+      $("lab-minor-rank").value = "";
+      updateTriad({ figure: null, hex: null, majors: [], source: "" });
+    }
+
+    // ======= LAB HANDLERS (mirror oracle but labelled as "play") =======
+
+    function fromGeomancyLab() {
+      const value = $("lab-geomancy").value;
+      if (!value) {
+        updateTriad({ figure: null, hex: null, majors: [], source: "" });
+        return;
+      }
+      const fig = GEOMANTIC_FIGURES.find((g) => g.figure === value);
+      const hex = hexagramFromNumber(fig.iching);
+      const majors = majorsFromFigure(fig);
+
+      $("select-geomancy").value = fig.figure;
+      $("input-hex").value = hex ? hex.number : "";
+      $("select-major").value = "";
+      $("select-minor-suit").value = "";
+      $("select-minor-rank").value = "";
+
+      updateTriad({ figure: fig, hex, majors, source: `Geomantic figure ${fig.name} (via lab)` });
+    }
+
+    function fromHexLab() {
+      const raw = $("lab-hex").value;
+      const num = parseInt(raw, 10);
+      const hex = hexagramFromNumber(num);
+      if (!hex) {
+        updateTriad({ figure: null, hex: null, majors: [], source: "" });
+        return;
+      }
+      const fig = figureFromHex(num);
+      const majors = majorsFromFigure(fig);
+
+      $("select-geomancy").value = fig ? fig.figure : "";
+      $("input-hex").value = num || "";
+      $("select-major").value = "";
+      $("select-minor-suit").value = "";
+      $("select-minor-rank").value = "";
+
+      updateTriad({ figure: fig, hex, majors, source: `Hexagram #${num} (via lab)` });
+    }
+
+    function fromMajorLab() {
+      const id = $("lab-major").value;
+      if (!id) {
+        updateTriad({ figure: null, hex: null, majors: [], source: "" });
+        return;
+      }
+      const fig = GEOMANTIC_FIGURES.find((g) =>
+        (g.tarot_major || []).includes(id)
+      );
+      const hex = fig ? hexagramFromNumber(fig.iching) : null;
+      const majors = fig ? majorsFromFigure(fig) : [id];
+
+      $("select-geomancy").value = fig ? fig.figure : "";
+      $("input-hex").value = hex ? hex.number : "";
+      $("select-major").value = id;
+      $("select-minor-suit").value = "";
+      $("select-minor-rank").value = "";
+
+      const label = TAROT_MAJOR_LABELS[id] || id;
+      updateTriad({ figure: fig, hex, majors, source: `Tarot Major ${label} (via lab)` });
+    }
+
+    function fromMinorLab() {
+      const suit = $("lab-minor-suit").value;
+      const rank = $("lab-minor-rank").value;
+      if (!suit || !rank) {
+        updateTriad({ figure: null, hex: null, majors: [], source: "" });
+        return;
+      }
+      const { hexagram, figure } = minorToHexAndFigure(suit, rank);
+      const hex = hexagram;
+      const majors = figure ? majorsFromFigure(figure) : [];
+
+      $("select-geomancy").value = figure ? figure.figure : "";
+      $("input-hex").value = hex ? hex.number : "";
+      $("select-major").value = "";
+      $("select-minor-suit").value = suit;
+      $("select-minor-rank").value = rank;
+
+      const label = `${rank[0].toUpperCase()}${rank.slice(1)} of ${suit[0].toUpperCase()}${suit.slice(1)}`;
+      updateTriad({ figure, hex, majors, source: `Tarot Minor ${label} (via lab)` });
+    }
+
+    // ======= INIT =======
+
+    function initSelects() {
+      const geomSel = $("select-geomancy");
+      const labGeomSel = $("lab-geomancy");
+      GEOMANTIC_FIGURES.forEach((g) => {
+        const opt1 = document.createElement("option");
+        opt1.value = g.figure;
+        opt1.textContent = `${g.name} – ${g.key}`;
+        geomSel.appendChild(opt1);
+
+        const opt2 = document.createElement("option");
+        opt2.value = g.figure;
+        opt2.textContent = `${g.name} – ${g.key}`;
+        labGeomSel.appendChild(opt2);
+      });
+
+      const majorSel = $("select-major");
+      const labMajorSel = $("lab-major");
+      const uniqueMajors = [...new Set(
+        GEOMANTIC_FIGURES.flatMap((f) => f.tarot_major || [])
+      )].sort();
+      uniqueMajors.forEach((id) => {
+        const label = TAROT_MAJOR_LABELS[id] || id;
+        const o1 = document.createElement("option");
+        o1.value = id;
+        o1.textContent = label;
+        majorSel.appendChild(o1);
+
+        const o2 = document.createElement("option");
+        o2.value = id;
+        o2.textContent = label;
+        labMajorSel.appendChild(o2);
+      });
+    }
+
+    function initFromUrlHex() {
+      const params = new URLSearchParams(window.location.search);
+      const hexParam = params.get("hex");
+      if (!hexParam) return;
+      const num = parseInt(hexParam, 10);
+      const hex = hexagramFromNumber(num);
+      if (!hex) return;
+      const fig = figureFromHex(num);
+      const majors = majorsFromFigure(fig);
+      $("input-hex").value = num;
+      $("select-geomancy").value = fig ? fig.figure : "";
+      $("lab-hex").value = num;
+      $("lab-geomancy").value = fig ? fig.figure : "";
+      updateTriad({ figure: fig, hex, majors, source: `Hexagram #${num} (from System Map)` });
+    }
+
+    function init() {
+      initSelects();
+      updateTriad({ figure: null, hex: null, majors: [], source: "" });
+
+      $("btn-cast").addEventListener("click", castCoins);
+      $("btn-from-geomancy").addEventListener("click", useGeomancy);
+      $("btn-from-hexagram").addEventListener("click", useHexagram);
+      $("btn-from-major").addEventListener("click", useMajor);
+      $("btn-from-minor").addEventListener("click", useMinor);
+      $("btn-random-question").addEventListener("click", randomQuestion);
+      $("btn-clear").addEventListener("click", clearAll);
+
+      $("lab-geomancy").addEventListener("change", fromGeomancyLab);
+      $("lab-hex").addEventListener("change", fromHexLab);
+      $("lab-major").addEventListener("change", fromMajorLab);
+      $("lab-minor-suit").addEventListener("change", fromMinorLab);
+      $("lab-minor-rank").addEventListener("change", fromMinorLab);
+
+      initFromUrlHex();
+    }
+
+    document.addEventListener("DOMContentLoaded", init);
+  </script>
+</body>
+</html>
